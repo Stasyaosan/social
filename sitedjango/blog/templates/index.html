@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+<h2>Новости:</h2>
+<ul>
+    {% for new in news %}
+    <li>
+        <h2>{{new.title}}</h2>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h2 align="center">Шапка сайта</h2>
+    </header>
+    <ul class="menu">
+        <li>
+            <a href="/">Главная</a>
+        </li>
+        <li>
+            <a href="/contacts">Контакты</a>
+        </li>
+        {% if not 'login' in request.session %}
+        <li>
+            <a href="/reg">Регистрация</a>
+        </li>
+        <li>
+            <a href="/auth">Авторизация</a>
+        </li>
+        {% endif %}
+        {% if 'login' in request.session %}
+        <li>
+            <a href="/logout">Выход</a>
+        </li>
+        <li>
+            <a href="/panel">Личная понель</a>
+        </li>
+        <li>
+            <p>{{user.name}}</p>
+        </li>
+        <li>
+            <a href="/users">Список пользователей</a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="/articles">Статьи</a>
+        </li>
+    </ul>
+    {% block content %}{% endblock %}
+    <footer>
+        <p align="center">Футер сайта</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+{% block title %}Список статей{% endblock %}
+{% block content %}
+<h2 align="center">Статьи:</h2>
+<ul>
+    {% for article in articles %}
+    <li><a href="/article/{{article.id}}">{{article.title}}</a> </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

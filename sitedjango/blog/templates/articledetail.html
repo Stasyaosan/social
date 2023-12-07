@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+{% block title %}{{article.title}}{% endblock %}
+{% block content %}
+<h2 align="center">{{article.title}}</h2>
+ <p align="center"><img src="/{{article.img}}" width="500"></p>
+{{article.fulltext}}
+<ul>
+    {% for coment in comentary %}
+    <li class="coment_li"> <b>{{coment.name}}</b> : {{coment.title}} <br> <i>{{coment.date}}</i></li>
+
+{% endfor %}
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{article.id}}">
+    <div class="formitem">
+        <div>Имя</div>
+        <div>
+            <input type="text" name="name">
+        </div>
+    </div>
+        <div class="formitem">
+            <div>Коментарий</div>
+            <div>
+                <textarea name="comment"></textarea>
+        </div>
+    </div>
+
+    <div class="btn_add">
+        <input type="submit", value="Добавить коменарий">
+    </div>
+
+</form>
+
+{% endblock %}
