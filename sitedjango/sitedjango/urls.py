@@ -16,24 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from blog.views import *
-from blog.urls.page import main_patterns
+from blog.urls.pages import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(main_patterns)),
-    path('contacts/', contacts),
-    path('article/<int:id>', articlesid),
-    path('reg/', reg),
-    path('auth/', auth),
-    path('panel/', panel),
-    path('logout/', logout),
-    path('contact/', contact),
-    path('addarticle/', addarticle),
-    path('listarticles/', listarticles),
+    path('', include(user_patterns)),
+    path('', include(chat_patterns)),
+    path('', include(contacts_patterns)),
     path('send/', send),
-    path('users/', users),
-    path('users/<str:login>', userdetail),
-    path('chat/<int:id>', chatid),
-    path('ajaxchat/', ajaxchat),
-    path('ajaxdelete/', ajaxdelete),
 ]

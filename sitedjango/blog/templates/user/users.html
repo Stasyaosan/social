@@ -2,9 +2,11 @@
 {% block title %}Список пользователей{% endblock %}
 {% block content %}
 <h2 align="center">Пользователи:</h2>
-<ul>
+<ul class="users_list">
     {% for user in users %}
+    {% if not current_user == user %}
     <li><a href="/users/{{user.login}}">{{user.login}}</a> </li>
+    {% endif %}
     {% endfor %}
 </ul>
 

@@ -20,10 +20,16 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+# class City(models.Model):
+#     title = models.CharField(max_length=200, verbose_name='Город')
+#
+#     def __str__(self):
+#         return self.title
 
 class User(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя')
     login = models.CharField(max_length=100, verbose_name='Login')
+    city = models.CharField(verbose_name='Город', max_length=200, default='Москва')
     email = models.CharField(max_length=100, verbose_name='Email')
     password = models.CharField(max_length=100, verbose_name='Пароль')
 
