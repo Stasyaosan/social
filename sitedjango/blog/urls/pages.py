@@ -17,6 +17,7 @@ user_patterns = [
     path('listarticles/', listarticles),
     path('users/<str:login>', userdetail),
     path('addfriend/', addfriend),
+    path('addavatar/', addavatar),
 ]
 
 chat_patterns = [

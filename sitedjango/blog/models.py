@@ -32,6 +32,7 @@ class User(models.Model):
     city = models.CharField(verbose_name='Город', max_length=200, default='Москва')
     email = models.CharField(max_length=100, verbose_name='Email')
     password = models.CharField(max_length=100, verbose_name='Пароль')
+    avatar = models.ImageField(upload_to='static/user', default='static/user/default.png')
 
     def __str__(self):
         return self.name

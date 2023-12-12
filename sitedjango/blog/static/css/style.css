@@ -2,6 +2,7 @@
     display: inline-block;
     padding: 10px;
 }
+
 .menu {
     text-align: center;
 }
@@ -109,4 +110,9 @@ h2 {
 .users_list {
     width: 700px;
     margin: 20px auto;
+}
+
+.filter {
+    width: 300px;
+    margin: 10px auto;
 }

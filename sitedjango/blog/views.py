@@ -246,19 +246,26 @@ def send(request):
     send_mail('tema', 'sdwadas', 'mawrin.stan@yandex.ru', ['mawrin.stan@yandex.ru'])
 
 def users(request):
+    if request.method == 'POST':
+        city = request.POST['city']
+        users = User.objects.filter(city=city)
+    else:
+        city = ''
+        users = User.objects.all()
+
     filter_city = User.objects.values('city').annotate()
     s = []
     c1 = filter_city[0]['city']
-    s.append(c1)
+    print(filter_city)
     for i in filter_city:
         if not i['city'] == c1:
             s.append(i['city'])
             c1 = i['city']
-
+    # print(s)
     current_user = get_object_or_404(User, login=request.session['login'])
-    users = User.objects.all()
 
-    return render(request, 'user/users.html', context={'users': users, 'current_user': current_user})
+    return render(request, 'user/users.html', context={'users': users, 'current_user': current_user,
+                                                       's': s, 'city':city})
 
 def userdetail(request, login):
     is_in_friend = False
@@ -322,3 +329,21 @@ def ajaxdelete(request):
         Chat.objects.filter(id=id).delete()
         response_data = {'data': 1}
         return JsonResponse(response_data)
+
+def addavatar(request):
+    if 'login' in request.session:
+        suc = ''
+        if request.method == 'POST' and request.FILES:
+            img = request.FILES['avatar']
+
+            f = FileSystemStorage()
+            f_name = f.save(img.name, img)
+
+            user_id = get_object_or_404(User, login=request.session['login']).id
+            user = User.objects.get(id=user_id)
+            user.avatar = '/static/user/' + f_name
+            user.save()
+
+        return redirect('/panel')
+    else:
+        return redirect('/')

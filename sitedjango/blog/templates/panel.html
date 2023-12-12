@@ -27,6 +27,19 @@
         </li>
     </ul>
 </form>
+
+<form method="post" action="/addavatar/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <ul class="form_reg">
+        <li>
+            <label>Аватарка: </label>
+            <input type="file" name="avatar">
+        </li>
+        <li>
+            <input type="submit" value="Добавить аватарку" >
+        </li>
+    </ul>
+</form>
 <p align="center"><a href="/addarticle">Создать статью</a></p>
 <p align="center"><a href="/listarticles">Список статей</a></p>
 {% endblock %}
