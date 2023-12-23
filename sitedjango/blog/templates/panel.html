@@ -2,6 +2,14 @@
 {% block title %}Регистрация{% endblock %}
 {% block content %}
 <h2>Личная панель</h2>
+<p align="center">
+    <input type="checkbox" id="mode">
+    <label for="mode">Тёмная тема</label>
+</p>
+
+<p align="center">
+    <a href="/logout">Выход</a>
+</p>
 
 <form method="post">
     {% csrf_token %}

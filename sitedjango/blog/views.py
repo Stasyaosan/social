@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from blog.models import *
-from blog.forms import *
+from .forms import *
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import JsonResponse
@@ -9,6 +9,7 @@ import json
 
 from itertools import groupby
 from collections import Counter
+
 
 def contact(request):
     if request.method == 'POST':
@@ -30,6 +31,7 @@ def contact(request):
 
     return render(request, 'contact.html', context={'form': form, 'suc': suc})
 
+
 def index(request):
     data = ''
     if 'login' in request.session:
@@ -37,10 +39,13 @@ def index(request):
         data = User.objects.filter(login=loginsession).first()
         # user = User.objects.filter(id=data.id).first()
 
+    images_slider = Slider.objects.all()
+    print(images_slider)
     news = News.objects.all()
     context = {
         'news': news,
-        'user': data
+        'user': data,
+        'images': images_slider
     }
     return render(request, 'index.html', context=context)
 
@@ -158,6 +163,7 @@ def auth(request):
     }
     return render(request, 'auth.html', context=context)
 
+
 def panel(request):
     if 'login' in request.session:
         loginsession = request.session['login']
@@ -183,10 +189,12 @@ def panel(request):
     else:
         return redirect('/auth')
 
+
 def logout(request):
     if 'login' in request.session:
         del request.session['login']
     return redirect('/reg')
+
 
 def addarticle(request):
     if 'login' in request.session:
@@ -223,6 +231,7 @@ def addarticle(request):
 
     return render(request, 'addarticle.html', context={'form': form, 'suc': suc})
 
+
 def listarticles(request):
     if 'login' in request.session:
         user = User.objects.filter(login=request.session['login']).first()
@@ -230,6 +239,7 @@ def listarticles(request):
         return render(request, 'listarticles.html', context={'articles': articles})
     else:
         return render(request, '404.html')
+
 
 def send_notif(user, link_article):
     subject = 'Оповещение создания статьи от пользователя ' + user
@@ -242,39 +252,63 @@ def send_notif(user, link_article):
         email_list.append(user.email)
     send_mail(subject, message, from_email, email_list)
 
+
 def send(request):
     send_mail('tema', 'sdwadas', 'mawrin.stan@yandex.ru', ['mawrin.stan@yandex.ru'])
+
 
 def users(request):
     if request.method == 'POST':
         city = request.POST['city']
-        users = User.objects.filter(city=city)
+        if city == 'Все города':
+            users = User.objects.all()
+        else:
+            users = User.objects.filter(city=city)
     else:
         city = ''
         users = User.objects.all()
 
+    users_new = []
+    for user in users:
+        users_new.append({
+            'login': user.login,
+            'avatar': str(user.avatar).split('/')[-1]
+        })
+
     filter_city = User.objects.values('city').annotate()
-    s = []
-    c1 = filter_city[0]['city']
-    print(filter_city)
+    app = []
     for i in filter_city:
-        if not i['city'] == c1:
-            s.append(i['city'])
-            c1 = i['city']
-    # print(s)
+        app.append(i['city'])
+    s = list(set(app))
+    s.insert(0, 'Все города')
     current_user = get_object_or_404(User, login=request.session['login'])
 
-    return render(request, 'user/users.html', context={'users': users, 'current_user': current_user,
-                                                       's': s, 'city':city})
+    return render(request, 'user/users.html', context={'users': users_new, 'current_user': current_user,
+                                                       's': s, 'city': city})
+
 
 def userdetail(request, login):
+    if request.method == 'POST':
+        pass
+    form = Page()
+
     is_in_friend = False
     user = User.objects.filter(login=login).first()
+    user.avatar = '/static/images/' + str(user.avatar).split('/')[-1]
     current_user = get_object_or_404(User, login=request.session['login'])
     if Friend.objects.filter(user=current_user, friend=user).exists():
         is_in_friend = True
 
-    return render(request, 'user/userdetail.html', context={'user': user, 'is_in_friend': is_in_friend})
+    friends = Friend.objects.filter(user=user)
+    friends_new = []
+    for friend in friends:
+        friends_new.append({
+            'friends': str(friend).split('-')[-1]
+        })
+
+    return render(request, 'user/userdetail.html',
+                  {'user': user, 'is_in_friend': is_in_friend, 'friends': friends_new, 'form': form})
+
 
 def addfriend(request):
     if request.method == 'POST':
@@ -288,6 +322,7 @@ def addfriend(request):
 
         return redirect('/users/' + user.login)
 
+
 def chatid(request, id):
     user = get_object_or_404(User, login=request.session['login'])
     frienduser = get_object_or_404(User, id=id)
@@ -298,7 +333,7 @@ def chatid(request, id):
     chats = Chat.objects.filter(Q(user=user, friend=frienduser) | Q(user=frienduser, friend=user)).order_by('date')
     print(chats)
 
-    return render(request, 'chat/chatid.html', context={'chats':chats, 'friend': id, 'user': request.session['login']})
+    return render(request, 'chat/chatid.html', context={'chats': chats, 'friend': id, 'user': request.session['login']})
 
 
 def ajaxchat(request):
@@ -312,15 +347,16 @@ def ajaxchat(request):
         r = ''
         for i in chats:
             r += '<div class="chat_message_item">'
-            r += '<p>' + i.user.login + '' + str(i.date) +'</p>'
+            r += '<p>' + i.user.login + '' + str(i.date) + '</p>'
             r += '<p>' + i.message + '<p>'
             if user == i.user:
-                r += '<p><a href="" onclick="deletemessage('+str(i.id)+')">Удалить</a></p>'
+                r += '<p><a href="" onclick="deletemessage(' + str(i.id) + ')">Удалить</a></p>'
             r += '</div>'
 
         response_data = {'data': r}
 
         return JsonResponse(response_data)
+
 
 def ajaxdelete(request):
     if request.method == 'POST':
@@ -329,6 +365,7 @@ def ajaxdelete(request):
         Chat.objects.filter(id=id).delete()
         response_data = {'data': 1}
         return JsonResponse(response_data)
+
 
 def addavatar(request):
     if 'login' in request.session:

@@ -1,5 +1,5 @@
 from django import forms
-from blog.models import Category
+from .models import *
 
 c = []
 
@@ -22,3 +22,8 @@ class AddArticle(forms.Form):
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Поиск', max_length=100)
+
+class Page(forms.Form):
+    class Meta:
+        model = MyPage
+        fields = ['text', 'image', 'vidio']

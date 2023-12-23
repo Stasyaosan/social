@@ -3,7 +3,7 @@
 {% block content %}
 <div class="user_panel">
     <div>
-        <p><img src="/static/user/default.png" width="300px"></p>
+        <p><img src="{{user.avatar}}" width="300px"></p>
         <p>
             <form action="/addfriend/" method="post">
                 {% csrf_token %}
@@ -25,6 +25,20 @@
         <p><b>Name: </b>{{user.name}}</p>
         <p><b>Login: </b>{{user.login}}</p>
         <p><b>Email: </b>{{user.email}}</p>
+        <p><b>Друзья: </b>
+            {% for friend in friends %}
+            {{friend.friends}}
+        </p>
+        {% endfor %}
+
     </div>
+</div>
+<div>
+    <h2>Мои записи</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Добавить</button>
+    </form>
 </div>
 {% endblock %}

@@ -9,9 +9,9 @@
         <select name="city">
         {% for i in s %}
             {% if city == i %}
-            <option value="{{i}}" selected>{{i}}</option>
+                <option value="{{i}}" selected>{{i}}</option>
             {% else %}
-            <option value="{{i}}">{{i}}</option>
+                <option value="{{i}}">{{i}}</option>
             {% endif %}
         {% endfor %}
         </select>
@@ -22,7 +22,10 @@
 <ul class="users_list">
     {% for user in users %}
     {% if not current_user == user %}
-    <li><a href="/users/{{user.login}}">{{user.login}}</a> </li>
+    <li>
+        <p><img src="/static/images/{{user.avatar}}"></p>
+        <a href="/users/{{user.login}}">{{user.login}}</a>
+    </li>
     {% endif %}
     {% endfor %}
 </ul>

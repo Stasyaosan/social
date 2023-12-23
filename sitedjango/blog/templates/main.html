@@ -4,7 +4,12 @@
     {% load static %}
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="/static/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="/static/slick/slick-theme.css">
 </head>
 <body>
     <header>
@@ -27,13 +32,10 @@
         {% endif %}
         {% if 'login' in request.session %}
         <li>
-            <a href="/logout">Выход</a>
-        </li>
-        <li>
             <a href="/panel">Личная понель</a>
         </li>
         <li>
-            <p>{{user.name}}</p>
+            <p>{{request.session.login}}</p>
         </li>
         <li>
             <a href="/users">Список пользователей</a>
@@ -47,5 +49,74 @@
     <footer>
         <p align="center">Футер сайта</p>
     </footer>
+    <script src="/static/js/jquery-3.7.1.min.js" type="text/javascript"></script>
+    <script>
+    function setCookie(name, value, days) {
+            var expires = "";
+
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var cookies = document.cookie.split(';');
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1, cookie.length);
+                }
+                if (cookie.indexOf(nameEQ) === 0) {
+                    return cookie.substring(nameEQ.length, cookie.length);
+                }
+            }
+
+            return null;
+        }
+
+        $('#mode').on('click', function(){
+            let l = $('#mode').prop("checked");
+            if(l){
+                $('body').css('background-image', 'url(/static/images/background_black.jpg)');
+                $('body').css('color', '#fff');
+                setCookie('mode', 'black', 1);
+            }
+            else{
+                $('body').css('background-image', 'url(/static/images/background_white.jpg)');
+                $('body').css('color', '#000');
+                setCookie('mode', 'white', 1);
+            }
+        });
+
+        let mode = getCookie('mode');
+        if(mode == 'black'){
+            $('body').css('background-image', '#000');
+            $('body').css('color', '#fff');
+            $('#mode').prop("checked", true);
+        };
+        if(mode == 'white'){
+            $('body').css('background-image', 'url(/static/images/background_white.jpg)');
+            $('body').css('color', '#000');
+            $('#mode').prop("checked", false);
+        };
+    </script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+<script src="/static/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+        $(document).on('ready', function() {
+          $(".vertical-center").slick({
+            dots: true,
+            vertical: true,
+            centerMode: true,
+            autoplay: true,
+          });
+        });
+  </script>
 </body>
 </html>

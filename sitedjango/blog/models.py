@@ -32,7 +32,7 @@ class User(models.Model):
     city = models.CharField(verbose_name='Город', max_length=200, default='Москва')
     email = models.CharField(max_length=100, verbose_name='Email')
     password = models.CharField(max_length=100, verbose_name='Пароль')
-    avatar = models.ImageField(upload_to='static/user', default='static/user/default.png')
+    avatar = models.ImageField(upload_to='blog/static/images', default='static/user/default.png')
 
     def __str__(self):
         return self.name
@@ -79,3 +79,11 @@ class Chat(models.Model):
 
     def __str__(self):
         return f'{self.user.name} - {self.friend.name}'
+
+class Slider(models.Model):
+    image = models.ImageField(upload_to='media/')
+
+class MyPage(models.Model):
+    text = models.TextField(default='')
+    image = models.ImageField(upload_to='media/')
+    video = models.FileField(upload_to='media/')
