@@ -175,3 +175,8 @@ h2 {
 .slick-prev:before, .slick-next:before{
     color: #000 !important;
 }
+
+.pages_list {
+    width: 600px;
+    margin: 15px auto;
+}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
-from blog.models import *
+from .models import *
 from .forms import *
 from django.core.mail import send_mail
 from django.db.models import Q
@@ -288,12 +288,17 @@ def users(request):
 
 
 def userdetail(request, login):
-    if request.method == 'POST':
-        pass
+    user = User.objects.filter(login=login).first()
+    if request.method == 'POST' and request.FILES:
+        form = Page(request.POST, request.FILES)
+        if form.is_valid():
+            new_page = form.save(commit=False)
+            new_page.user = user
+            new_page.save()
+
     form = Page()
 
     is_in_friend = False
-    user = User.objects.filter(login=login).first()
     user.avatar = '/static/images/' + str(user.avatar).split('/')[-1]
     current_user = get_object_or_404(User, login=request.session['login'])
     if Friend.objects.filter(user=current_user, friend=user).exists():
@@ -306,8 +311,10 @@ def userdetail(request, login):
             'friends': str(friend).split('-')[-1]
         })
 
+    pages = MyPage.objects.all()
+
     return render(request, 'user/userdetail.html',
-                  {'user': user, 'is_in_friend': is_in_friend, 'friends': friends_new, 'form': form})
+                  {'user': user, 'is_in_friend': is_in_friend, 'friends': friends_new, 'form': form, 'pages': pages})
 
 
 def addfriend(request):

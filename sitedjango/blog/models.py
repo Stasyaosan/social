@@ -42,7 +42,7 @@ class Article(models.Model):
     description = models.TextField(verbose_name='Описание статьи')
     img = models.ImageField(upload_to='blog/static/images', verbose_name='Картинка')
     fulltext = models.TextField(verbose_name='Полный текст статьи')
-    cat = models.ForeignKey(Category, models.CASCADE)
+    cat = models.ForeignKey(Category, models.CASCADE, default=1)
     user = models.ForeignKey(User, models.CASCADE, default=1)
     date = models.DateTimeField(auto_now=True)
 
@@ -84,6 +84,8 @@ class Slider(models.Model):
     image = models.ImageField(upload_to='media/')
 
 class MyPage(models.Model):
-    text = models.TextField(default='')
-    image = models.ImageField(upload_to='media/')
-    video = models.FileField(upload_to='media/')
+    text = models.TextField(default='', verbose_name='Текст')
+    image = models.ImageField(upload_to='media/', verbose_name='Картинка', default=None)
+    video = models.FileField(upload_to='media/', verbose_name='Видео', default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userpage', default=1)
+    date = models.DateTimeField(auto_now=True)

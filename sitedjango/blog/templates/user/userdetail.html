@@ -33,12 +33,38 @@
 
     </div>
 </div>
-<div>
+
+
+<div style="width: 600px; margin: 10px auto;">
     <h2>Мои записи</h2>
-    <form method="post">
+    {% if request.session.login == user.login %}
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button>Добавить</button>
     </form>
+    {% endif %}
+</div>
+
+<div class="pages_list">
+    <div class="page_item">
+        {% for page in pages %}
+        <div>Дата публикации: {{page.date}}</div>
+        <div>
+            <p>
+                <img src="/media/{{page.image}}" width="100%">
+            </p>
+        </div>
+        <div>
+            <video width="100%" height="300" controls="controls" poster="/media/{{page.image}}">
+       <source src="/media/{{page.video}}" type='video/ogg; codecs="theora, vorbis"'>
+       <source src="/media/{{page.video}}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+       <source src="/media/{{page.video}}" type='video/webm; codecs="vp8, vorbis"'>
+       Тег video не поддерживается вашим браузером.
+       <a href="/{{page.video}}">Скачайте видео</a>.
+  </video>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -23,7 +23,7 @@ class AddArticle(forms.Form):
 class SearchForm(forms.Form):
     query = forms.CharField(label='Поиск', max_length=100)
 
-class Page(forms.Form):
+class Page(forms.ModelForm):
     class Meta:
         model = MyPage
-        fields = ['text', 'image', 'vidio']
+        fields = ['text', 'image', 'video']
