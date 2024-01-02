@@ -32,7 +32,13 @@
         {% endif %}
         {% if 'login' in request.session %}
         <li>
-            <a href="/panel">Личная понель</a>
+            <a href="panel/">Личная понель</a>
+        </li>
+        <li>
+            <a href="{% url 'snake' %}">Игра змейка</a>
+        </li>
+        <li>
+            <a href="/user/mystory">Мои записи</a>
         </li>
         <li>
             <p>{{request.session.login}}</p>

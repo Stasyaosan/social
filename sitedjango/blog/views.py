@@ -189,6 +189,11 @@ def panel(request):
     else:
         return redirect('/auth')
 
+def mystory(request):
+    current_user = get_object_or_404(User, login=request.session['login'])
+    my_stories = MyPage.objects.filter(user=current_user)
+
+    return render(request, 'user/mystory.html', context={'my_stories': my_stories})
 
 def logout(request):
     if 'login' in request.session:
@@ -391,3 +396,8 @@ def addavatar(request):
         return redirect('/panel')
     else:
         return redirect('/')
+
+
+def snake(request):
+    print(1)
+    return render(request, 'snake.html')

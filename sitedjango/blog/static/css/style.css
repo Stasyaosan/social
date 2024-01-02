@@ -180,3 +180,13 @@ h2 {
     width: 600px;
     margin: 15px auto;
 }
+
+.mystory_list {
+    width: 600px;
+    margin: 15px auto;
+}
+
+.snake {
+    border: 5px solid #000;
+    background: #B0E0E6;
+}

@@ -6,12 +6,14 @@ main_patterns = [
     path('', index),
     path('article/<int:id>', articlesid),
     path('addarticle/', addarticle),
+    path('snake/', snake, name='snake'),
 ]
 
 user_patterns = [
     path('reg/', reg),
     path('auth/', auth),
-    path('panel/', panel),
+    path('user/panel/', panel),
+    path('user/mystory/', mystory),
     path('logout/', logout),
     path('users/', users),
     path('listarticles/', listarticles),
